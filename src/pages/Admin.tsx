@@ -127,7 +127,7 @@ export const Admin = () => {
         imageUrl = uploadData.url;
       }
 
-      const finalEventDate = postType === 'event' ? (eventDate || null) : null;
+      const finalEventDate = postType === 'event' && eventDate ? new Date(eventDate).toISOString() : null;
       const method = editingId ? 'PUT' : 'POST';
 
       const postRes = await fetch('/api/updates', {
