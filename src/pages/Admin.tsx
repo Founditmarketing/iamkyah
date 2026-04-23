@@ -18,6 +18,7 @@ export const Admin = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [eventDate, setEventDate] = useState('');
+  const [postType, setPostType] = useState<'update' | 'event'>('update');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -105,6 +106,8 @@ export const Admin = () => {
         imageUrl = uploadData.url;
       }
 
+      const finalEventDate = postType === 'event' ? (eventDate || null) : null;
+
       const postRes = await fetch('/api/updates', {
         method: 'POST',
         headers: {
@@ -114,7 +117,7 @@ export const Admin = () => {
         body: JSON.stringify({
           title,
           description,
-          event_date: eventDate || null,
+          event_date: finalEventDate,
           image_url: imageUrl
         }),
       });
@@ -168,6 +171,12 @@ export const Admin = () => {
   return (
     <div className="min-h-screen pt-32 pb-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Admin Dashboard</h1>
+          <p className="text-lg text-gray-600">Manage your website updates and events</p>
+        </div>
+
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12">
           
           <div className="w-full lg:w-1/3 bg-white rounded-2xl shadow-xl p-8 sticky top-32">
@@ -185,6 +194,24 @@ export const Admin = () => {
               </button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
+              
+              <div className="flex p-1 bg-gray-100 rounded-lg">
+                <button
+                  type="button"
+                  onClick={() => setPostType('update')}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${postType === 'update' ? 'bg-white shadow text-black' : 'text-gray-500 hover:text-black'}`}
+                >
+                  Update / Info
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPostType('event')}
+                  className={`flex-1 py-2 text-sm font-semibold rounded-md transition-all ${postType === 'event' ? 'bg-white shadow text-black' : 'text-gray-500 hover:text-black'}`}
+                >
+                  Calendar Event
+                </button>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Title *</label>
                 <input
@@ -206,23 +233,26 @@ export const Admin = () => {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Event Date (Leave blank if this is just an update/info)</label>
-                <div className="relative w-full overflow-hidden">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none z-10" />
-                  {!eventDate && (
-                    <div className="absolute inset-y-0 left-10 flex items-center pointer-events-none z-10">
-                      <span className="text-gray-400">Select date and time (optional)</span>
-                    </div>
-                  )}
-                  <input
-                    type="datetime-local"
-                    value={eventDate}
-                    onChange={(e) => setEventDate(e.target.value)}
-                    className={`w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none min-w-0 bg-transparent relative z-20 appearance-none [&::-webkit-datetime-edit]:appearance-none ${!eventDate ? 'text-transparent' : 'text-gray-900'}`}
-                  />
+              {postType === 'event' && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Event Date & Time *</label>
+                  <div className="relative w-full overflow-hidden">
+                    <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none z-10" />
+                    {!eventDate && (
+                      <div className="absolute inset-y-0 left-10 flex items-center pointer-events-none z-10">
+                        <span className="text-gray-400">Select date and time</span>
+                      </div>
+                    )}
+                    <input
+                      type="datetime-local"
+                      value={eventDate}
+                      onChange={(e) => setEventDate(e.target.value)}
+                      required={postType === 'event'}
+                      className={`w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black outline-none min-w-0 bg-transparent relative z-20 appearance-none [&::-webkit-datetime-edit]:appearance-none ${!eventDate ? 'text-transparent' : 'text-gray-900'}`}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Image (Optional)</label>
