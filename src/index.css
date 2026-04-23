@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", serif;
+  --font-display: "Cormorant Garamond", serif;
+  
+  --color-primary: #5a6e5a;
+  --color-dark: #2d2d2d;
+}
+
+@layer base {
+  body {
+    @apply bg-[#fcfbf9] text-[#2d2d2d] selection:bg-[#5a6e5a] selection:text-white overflow-x-hidden antialiased;
+  }
+}
+
+.glass-card {
+  @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(90,110,90,0.08)];
+}
+
+.premium-shadow {
+  box-shadow: 0 20px 40px -15px rgba(90, 110, 90, 0.15), 0 0 20px 0 rgba(0, 0, 0, 0.03);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+.input-floating {
+  @apply w-full p-4 pt-6 pb-2 rounded-2xl bg-stone-50 border border-stone-100 focus:bg-white focus:ring-2 focus:ring-[#5a6e5a]/20 focus:border-[#5a6e5a] outline-none transition-all;
+}
+
+.label-floating {
+  @apply absolute left-4 top-4 text-stone-400 text-sm transition-all pointer-events-none;
+}
+
+input:focus + .label-floating, input:not(:placeholder-shown) + .label-floating, textarea:focus + .label-floating, textarea:not(:placeholder-shown) + .label-floating {
+  @apply text-xs top-2 text-[#5a6e5a] font-medium;
+}
