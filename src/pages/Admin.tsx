@@ -197,26 +197,30 @@ export const Admin = () => {
     <div className="min-h-screen pt-32 pb-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Admin Dashboard</h1>
-          <p className="text-lg text-gray-600">Manage your website updates and events</p>
+        <div className="relative mb-12">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Admin Dashboard</h1>
+            <p className="text-lg text-gray-600">Manage your website updates and events</p>
+          </div>
+          <div className="absolute top-0 right-0 md:top-2">
+            <button 
+              onClick={handleLogout}
+              className="bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-red-50 hover:text-red-600 hover:border-red-100 flex items-center transition-all shadow-sm"
+            >
+              <LogOut className="w-4 h-4 mr-2" />
+              Logout
+            </button>
+          </div>
         </div>
 
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12">
           
           <div className="w-full lg:w-1/3 bg-white rounded-2xl shadow-xl p-8 sticky top-32">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center mb-6">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center">
                 <Plus className="w-6 h-6 mr-2" />
                 {editingId ? 'Edit Post' : 'Create Post'}
               </h2>
-              <button 
-                onClick={handleLogout}
-                className="text-sm text-gray-500 hover:text-red-600 flex items-center transition-colors"
-              >
-                <LogOut className="w-4 h-4 mr-1" />
-                Logout
-              </button>
             </div>
             <form onSubmit={handleSubmit} className="space-y-6">
               
