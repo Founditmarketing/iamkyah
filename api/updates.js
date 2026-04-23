@@ -47,6 +47,28 @@ export default async function handler(req, res) {
     }
   }
 
+  if (req.method === 'PUT') {
+    try {
+      const { id, title, description, event_date, image_url } = req.body;
+      if (!id || !title) {
+        return res.status(400).json({ error: 'ID and Title are required' });
+      }
+
+      await sql`
+        UPDATE updates 
+        SET title = ${title}, 
+            description = ${description}, 
+            event_date = ${event_date || null}, 
+            image_url = ${image_url || null}
+        WHERE id = ${id};
+      `;
+      return res.status(200).json({ message: 'Update modified successfully' });
+    } catch (error) {
+      console.error('Error updating record:', error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
   if (req.method === 'DELETE') {
     try {
       const { id } = req.query;

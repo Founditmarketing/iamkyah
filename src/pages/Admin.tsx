@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FormEvent } from 'react';
-import { Calendar, Image as ImageIcon, Trash2, Plus, Loader2, LogOut } from 'lucide-react';
+import { Calendar, Image as ImageIcon, Trash2, Plus, Loader2, LogOut, Edit2 } from 'lucide-react';
 
 interface UpdateItem {
   id: number;
@@ -22,6 +22,8 @@ export const Admin = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const savedAuth = localStorage.getItem('kyah_admin_auth');
@@ -81,6 +83,25 @@ export const Admin = () => {
     }
   };
 
+  const handleEditClick = (update: UpdateItem) => {
+    setEditingId(update.id);
+    setTitle(update.title);
+    setDescription(update.description || '');
+    if (update.event_date) {
+      setPostType('event');
+      const d = new Date(update.event_date);
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      const localDateStr = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+      setEventDate(localDateStr);
+    } else {
+      setPostType('update');
+      setEventDate('');
+    }
+    setExistingImageUrl(update.image_url || null);
+    setImageFile(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError('');
@@ -107,18 +128,20 @@ export const Admin = () => {
       }
 
       const finalEventDate = postType === 'event' ? (eventDate || null) : null;
+      const method = editingId ? 'PUT' : 'POST';
 
       const postRes = await fetch('/api/updates', {
-        method: 'POST',
+        method,
         headers: {
           'Content-Type': 'application/json',
           'x-admin-password': password
         },
         body: JSON.stringify({
+          id: editingId || undefined,
           title,
           description,
           event_date: finalEventDate,
-          image_url: imageUrl
+          image_url: imageUrl || existingImageUrl
         }),
       });
 
@@ -130,6 +153,8 @@ export const Admin = () => {
       setDescription('');
       setEventDate('');
       setImageFile(null);
+      setEditingId(null);
+      setExistingImageUrl(null);
       fetchUpdates();
     } catch (err: any) {
       setError(err.message || 'An error occurred');
@@ -183,7 +208,7 @@ export const Admin = () => {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-bold text-gray-900 flex items-center">
                 <Plus className="w-6 h-6 mr-2" />
-                Create Post
+                {editingId ? 'Edit Post' : 'Create Post'}
               </h2>
               <button 
                 onClick={handleLogout}
@@ -263,6 +288,12 @@ export const Admin = () => {
                         <p className="text-sm text-gray-900 font-medium truncate max-w-[200px]">{imageFile.name}</p>
                         <p className="text-xs text-gray-500 mt-1">Click to change</p>
                       </div>
+                    ) : existingImageUrl ? (
+                      <div className="text-center p-4">
+                        <img src={existingImageUrl} className="h-16 object-cover mx-auto mb-2 opacity-50 rounded" alt="Existing" />
+                        <p className="text-sm text-gray-900 font-medium truncate max-w-[200px]">Keep existing image</p>
+                        <p className="text-xs text-gray-500 mt-1">Click to replace</p>
+                      </div>
                     ) : (
                       <div className="flex flex-col items-center justify-center pt-5 pb-6">
                         <ImageIcon className="w-8 h-8 text-gray-400 mb-2" />
@@ -281,20 +312,35 @@ export const Admin = () => {
 
               {error && <p className="text-red-500 text-sm">{error}</p>}
               
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center disabled:opacity-70"
-              >
-                {isSubmitting ? (
-                  <>
+              <div className="flex gap-4">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="flex-1 bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors flex items-center justify-center disabled:opacity-70"
+                >
+                  {isSubmitting ? (
                     <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                    Posting...
-                  </>
-                ) : (
-                  'Post Update'
+                  ) : null}
+                  {editingId ? 'Update Post' : 'Create Post'}
+                </button>
+                {editingId && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setEditingId(null);
+                      setTitle('');
+                      setDescription('');
+                      setEventDate('');
+                      setExistingImageUrl(null);
+                      setImageFile(null);
+                      setPostType('update');
+                    }}
+                    className="flex-1 bg-gray-200 text-gray-800 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                  >
+                    Cancel
+                  </button>
                 )}
-              </button>
+              </div>
             </form>
           </div>
 
@@ -325,13 +371,22 @@ export const Admin = () => {
                       )}
                       <p className="text-gray-600 line-clamp-3">{update.description}</p>
                     </div>
-                    <button
-                      onClick={() => handleDelete(update.id)}
-                      className="text-gray-400 hover:text-red-500 transition-colors p-2 flex-shrink-0"
-                      title="Delete post"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
+                    <div className="flex flex-col gap-2 flex-shrink-0">
+                      <button
+                        onClick={() => handleEditClick(update)}
+                        className="text-gray-400 hover:text-blue-500 transition-colors p-2"
+                        title="Edit post"
+                      >
+                        <Edit2 className="w-5 h-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(update.id)}
+                        className="text-gray-400 hover:text-red-500 transition-colors p-2"
+                        title="Delete post"
+                      >
+                        <Trash2 className="w-5 h-5" />
+                      </button>
+                    </div>
                   </div>
                 ))
               )}
