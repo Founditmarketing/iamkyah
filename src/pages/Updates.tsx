@@ -16,6 +16,7 @@ export const Updates = () => {
   const [updates, setUpdates] = useState<UpdateItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [filter, setFilter] = useState<'all' | 'events' | 'updates'>('all');
 
   useEffect(() => {
     const fetchUpdates = async () => {
@@ -69,13 +70,35 @@ export const Updates = () => {
     <div className="min-h-screen pt-32 pb-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Updates & Events</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">Stay up to date with our latest news and upcoming events.</p>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-8">Stay up to date with our latest news and upcoming events.</p>
+          
+          <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-gray-100">
+            <button 
+              onClick={() => setFilter('all')}
+              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all ${filter === 'all' ? 'bg-black text-white' : 'text-gray-500 hover:text-black'}`}
+            >
+              All
+            </button>
+            <button 
+              onClick={() => setFilter('events')}
+              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all ${filter === 'events' ? 'bg-black text-white' : 'text-gray-500 hover:text-black'}`}
+            >
+              Events Only
+            </button>
+            <button 
+              onClick={() => setFilter('updates')}
+              className={`px-6 py-2 rounded-full text-sm font-semibold transition-all ${filter === 'updates' ? 'bg-black text-white' : 'text-gray-500 hover:text-black'}`}
+            >
+              Updates Only
+            </button>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+        <div className={`grid grid-cols-1 ${filter === 'updates' ? 'lg:grid-cols-1 max-w-5xl mx-auto' : 'lg:grid-cols-3'} gap-12`}>
           
+          {filter !== 'updates' && (
           <div className="lg:col-span-1 space-y-8">
             <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
               <h3 className="text-xl font-bold text-gray-900 mb-6">Event Calendar</h3>
@@ -113,10 +136,11 @@ export const Updates = () => {
               </div>
             )}
           </div>
+          )}
 
-          <div className="lg:col-span-2 space-y-12">
+          <div className={`${filter === 'updates' ? 'lg:col-span-1' : 'lg:col-span-2'} space-y-12`}>
             
-            {upcomingEvents.length > 0 && (
+            {filter !== 'updates' && upcomingEvents.length > 0 && (
               <section>
                 <h2 className="text-3xl font-bold text-gray-900 mb-8 border-b pb-4">Upcoming Events</h2>
                 <div className="space-y-6">
@@ -145,6 +169,7 @@ export const Updates = () => {
               </section>
             )}
 
+            {filter !== 'events' && (
             <section>
               <h2 className="text-3xl font-bold text-gray-900 mb-8 border-b pb-4">Latest Updates</h2>
               {generalUpdates.length === 0 ? (
@@ -168,6 +193,7 @@ export const Updates = () => {
                 </div>
               )}
             </section>
+            )}
 
           </div>
 

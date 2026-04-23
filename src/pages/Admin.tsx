@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FormEvent } from 'react';
-import { Calendar, Image as ImageIcon, Trash2, Plus, Loader2 } from 'lucide-react';
+import { Calendar, Image as ImageIcon, Trash2, Plus, Loader2, LogOut } from 'lucide-react';
 
 interface UpdateItem {
   id: number;
@@ -22,14 +22,31 @@ export const Admin = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
 
+  useEffect(() => {
+    const savedAuth = localStorage.getItem('kyah_admin_auth');
+    if (savedAuth === 'Iamkyahadmin2026') {
+      setPassword(savedAuth);
+      setIsAuthenticated(true);
+      fetchUpdates();
+    }
+  }, []);
+
   const handleLogin = (e: FormEvent) => {
     e.preventDefault();
     if (password === 'Iamkyahadmin2026') {
+      localStorage.setItem('kyah_admin_auth', password);
       setIsAuthenticated(true);
       fetchUpdates();
     } else {
       setError('Incorrect password');
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('kyah_admin_auth');
+    setIsAuthenticated(false);
+    setPassword('');
+    setUpdates([]);
   };
 
   const fetchUpdates = async () => {
@@ -154,10 +171,19 @@ export const Admin = () => {
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12">
           
           <div className="w-full lg:w-1/3 bg-white rounded-2xl shadow-xl p-8 sticky top-32">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <Plus className="w-6 h-6 mr-2" />
-              Create Update
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900 flex items-center">
+                <Plus className="w-6 h-6 mr-2" />
+                Create Post
+              </h2>
+              <button 
+                onClick={handleLogout}
+                className="text-sm text-gray-500 hover:text-red-600 flex items-center transition-colors"
+              >
+                <LogOut className="w-4 h-4 mr-1" />
+                Logout
+              </button>
+            </div>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Title *</label>
@@ -181,7 +207,7 @@ export const Admin = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Event Date (Optional)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Event Date (Leave blank if this is just an update/info)</label>
                 <div className="relative">
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
                   <input
