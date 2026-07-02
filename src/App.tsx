@@ -20,27 +20,38 @@ const ScrollToTop = () => {
   return null;
 };
 
+const Layout = () => {
+  const { pathname } = useLocation();
+  // The Contact page already acts as its own contact/footer block (socials + form),
+  // so the global footer beneath it reads as a duplicate footer — hide it there.
+  const hideFooter = pathname === '/contact';
+
+  return (
+    <div className="font-sans antialiased min-h-screen flex flex-col">
+      <Navbar />
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/nonprofit" element={<Nonprofit />} />
+          <Route path="/speaking" element={<Speaking />} />
+          <Route path="/classes" element={<Classes />} />
+          <Route path="/bio" element={<Bio />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/updates" element={<Updates />} />
+          <Route path="/admin" element={<Admin />} />
+        </Routes>
+      </main>
+      {!hideFooter && <Footer />}
+    </div>
+  );
+};
+
 export default function App() {
   return (
     <Router>
       <ScrollToTop />
-      <div className="font-sans antialiased min-h-screen flex flex-col">
-        <Navbar />
-        <main className="flex-grow">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/nonprofit" element={<Nonprofit />} />
-            <Route path="/speaking" element={<Speaking />} />
-            <Route path="/classes" element={<Classes />} />
-            <Route path="/bio" element={<Bio />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/updates" element={<Updates />} />
-            <Route path="/admin" element={<Admin />} />
-          </Routes>
-        </main>
-        <Footer />
-      </div>
+      <Layout />
     </Router>
   );
 }
