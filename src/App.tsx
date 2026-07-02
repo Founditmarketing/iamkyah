@@ -6,6 +6,8 @@ import { Home } from './pages/Home';
 import { About } from './pages/About';
 import { Nonprofit } from './pages/Nonprofit';
 import { Speaking } from './pages/Speaking';
+import { Classes } from './pages/Classes';
+import { Bio } from './pages/Bio';
 import { Contact } from './pages/Contact';
 import { Admin } from './pages/Admin';
 import { Updates } from './pages/Updates';
@@ -30,6 +32,8 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/nonprofit" element={<Nonprofit />} />
             <Route path="/speaking" element={<Speaking />} />
+            <Route path="/classes" element={<Classes />} />
+            <Route path="/bio" element={<Bio />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/updates" element={<Updates />} />
             <Route path="/admin" element={<Admin />} />

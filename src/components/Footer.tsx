@@ -2,67 +2,66 @@ import React from 'react';
 import { Linkedin, Instagram, Mail, Facebook } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const socials = [
+  { href: 'https://www.facebook.com/sixfeetabovela/', icon: Facebook, label: 'Six Feet Above Facebook' },
+  { href: 'https://www.linkedin.com/in/kyahspriggs', icon: Linkedin, label: 'LinkedIn' },
+  { href: 'https://www.instagram.com/kyahspriggs', icon: Instagram, label: 'Instagram' },
+  { href: 'mailto:itskyah@outlook.com', icon: Mail, label: 'Email' },
+];
+
+const quickLinks = [
+  { name: 'About', path: '/about' },
+  { name: 'Bio', path: '/bio' },
+  { name: 'Nonprofit', path: '/nonprofit' },
+  { name: 'Speaking', path: '/speaking' },
+  { name: 'Classes', path: '/classes' },
+  { name: 'Updates', path: '/updates' },
+  { name: 'Contact', path: '/contact' },
+];
+
 export const Footer = () => {
   return (
-    <footer id="contact" className="pt-32 pb-12 px-6 bg-white border-t border-stone-100">
+    <footer className="pt-20 pb-12 px-6 bg-white border-t border-stone-100">
       <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-24 items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16 items-start">
           <div>
-            <span className="text-xs uppercase tracking-[0.3em] font-bold text-[#5a6e5a] mb-6 block">Get in Touch</span>
-            <h2 className="text-6xl md:text-7xl font-display italic mb-10 text-balance leading-tight">Connect with <br/>Kyah Spriggs.</h2>
-            <p className="text-xl text-stone-500 mb-12 max-w-md font-light leading-relaxed">
-              Whether you're looking for support, a speaker, or a partnership, we'd love to hear from you.
+            <Link to="/" className="text-3xl font-display italic font-semibold tracking-tight hover:text-[#5a6e5a] transition-colors">
+              IAmKyah.com
+            </Link>
+            <p className="text-stone-500 font-light mt-4 max-w-sm leading-relaxed">
+              Advocate, speaker, and founder of Six Feet Above — helping people rediscover hope,
+              build resilience, and rise above life's hardest moments.
             </p>
-            <div className="flex gap-4">
-              <a href="https://www.facebook.com/sixfeetabovela/" target="_blank" rel="noreferrer" className="w-14 h-14 rounded-full border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-[#5a6e5a] hover:text-white hover:border-[#5a6e5a] transition-all duration-300 hover:shadow-lg hover:-translate-y-1" title="Six Feet Above Facebook">
-                <Facebook size={22} />
-              </a>
-              <a href="https://www.linkedin.com/in/kyahspriggs" target="_blank" rel="noreferrer" className="w-14 h-14 rounded-full border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-[#5a6e5a] hover:text-white hover:border-[#5a6e5a] transition-all duration-300 hover:shadow-lg hover:-translate-y-1" title="LinkedIn">
-                <Linkedin size={22} />
-              </a>
-              <a href="https://www.instagram.com/kyahspriggs" target="_blank" rel="noreferrer" className="w-14 h-14 rounded-full border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-[#5a6e5a] hover:text-white hover:border-[#5a6e5a] transition-all duration-300 hover:shadow-lg hover:-translate-y-1" title="Instagram">
-                <Instagram size={22} />
-              </a>
-              <a href="mailto:itskyah@outlook.com" className="w-14 h-14 rounded-full border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-[#5a6e5a] hover:text-white hover:border-[#5a6e5a] transition-all duration-300 hover:shadow-lg hover:-translate-y-1" title="Email">
-                <Mail size={22} />
-              </a>
+            <div className="flex gap-4 mt-8">
+              {socials.map(({ href, icon: Icon, label }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel={href.startsWith('http') ? 'noreferrer' : undefined}
+                  title={label}
+                  className="w-12 h-12 rounded-full border border-stone-200 flex items-center justify-center text-stone-600 hover:bg-[#5a6e5a] hover:text-white hover:border-[#5a6e5a] transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                >
+                  <Icon size={20} />
+                </a>
+              ))}
             </div>
           </div>
 
-          <form className="glass-card p-8 md:p-10 rounded-[2rem] space-y-5 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-[#5a6e5a]/5 rounded-bl-full pointer-events-none" />
-            <h3 className="text-2xl font-display italic mb-6">Send a Message</h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="relative">
-                <input type="text" id="name" placeholder=" " className="input-floating peer" />
-                <label htmlFor="name" className="label-floating">Full Name</label>
-              </div>
-              <div className="relative">
-                <input type="email" id="email" placeholder=" " className="input-floating peer" />
-                <label htmlFor="email" className="label-floating">Email Address</label>
-              </div>
-            </div>
-            
-            <div className="relative">
-              <select id="inquiry" className="input-floating appearance-none text-stone-700">
-                <option value="" disabled selected hidden>Select Inquiry Type</option>
-                <option value="Speaking">Speaking Engagement</option>
-                <option value="Nonprofit">Nonprofit Partnership</option>
-                <option value="Press">Media / Press</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            
-            <div className="relative">
-              <textarea id="message" rows={5} placeholder=" " className="input-floating resize-none peer"></textarea>
-              <label htmlFor="message" className="label-floating">Your Message</label>
-            </div>
-            
-            <button type="button" className="w-full bg-[#2d2d2d] text-white py-5 rounded-xl font-bold hover:bg-[#5a6e5a] transition-all duration-300 shadow-md hover:shadow-xl hover:-translate-y-1 mt-2">
-              Send Message
-            </button>
-          </form>
+          <div className="md:justify-self-end">
+            <span className="text-xs uppercase tracking-[0.3em] font-bold text-[#5a6e5a] mb-6 block">Explore</span>
+            <nav className="grid grid-cols-2 gap-x-12 gap-y-3">
+              {quickLinks.map((link) => (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  className="text-stone-600 hover:text-[#5a6e5a] transition-colors font-light"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
+          </div>
         </div>
 
         <div className="pt-10 border-t border-stone-100 flex flex-col md:flex-row justify-between items-center gap-6 text-stone-400 text-sm">

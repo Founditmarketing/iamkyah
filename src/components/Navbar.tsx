@@ -22,8 +22,10 @@ export const Navbar = () => {
 
   const navLinks = [
     { name: 'About', path: '/about' },
+    { name: 'Bio', path: '/bio' },
     { name: 'Nonprofit', path: '/nonprofit' },
     { name: 'Speaking', path: '/speaking' },
+    { name: 'Classes', path: '/classes' },
     { name: 'Updates', path: '/updates' },
     { name: 'Contact', path: '/contact' },
   ];

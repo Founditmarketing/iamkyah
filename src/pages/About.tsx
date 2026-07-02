@@ -1,8 +1,17 @@
 import React from 'react';
 import { Quote } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Lightbox, useLightbox } from '../components/Lightbox';
+
+const aboutImages = [
+  { src: 'https://i.imgur.com/tHZGcoF.png', caption: 'Speaking' },
+  { src: 'https://i.imgur.com/40npwux.png', caption: 'On Stage' },
+  { src: 'https://i.imgur.com/C6Fsc9o.png', caption: 'Community' },
+  { src: 'https://i.imgur.com/zzNU4p5.png', caption: 'Advocacy' },
+];
 
 export const About = () => {
+  const lightbox = useLightbox();
   return (
     <section className="py-32 bg-[#fcfbf9] min-h-screen">
       <div className="container mx-auto px-6">
@@ -16,20 +25,22 @@ export const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.1 }}
                 viewport={{ once: true, margin: "-100px" }}
-                src="https://i.imgur.com/tHZGcoF.png" 
-                alt="Speaking" 
-                className="rounded-3xl premium-shadow aspect-[4/5] object-cover w-full hover:scale-[1.03] transition-transform duration-500" 
-                referrerPolicy="no-referrer" 
+                src="https://i.imgur.com/tHZGcoF.png"
+                alt="Speaking"
+                onClick={() => lightbox.open(0)}
+                className="rounded-3xl premium-shadow aspect-[4/5] object-cover w-full hover:scale-[1.03] transition-transform duration-500 cursor-pointer"
+                referrerPolicy="no-referrer"
               />
               <motion.img 
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
                 viewport={{ once: true, margin: "-100px" }}
-                src="https://i.imgur.com/40npwux.png" 
-                alt="On Stage" 
-                className="rounded-3xl premium-shadow aspect-[4/3] object-cover w-full hover:scale-[1.03] transition-transform duration-500" 
-                referrerPolicy="no-referrer" 
+                src="https://i.imgur.com/40npwux.png"
+                alt="On Stage"
+                onClick={() => lightbox.open(1)}
+                className="rounded-3xl premium-shadow aspect-[4/3] object-cover w-full hover:scale-[1.03] transition-transform duration-500 cursor-pointer"
+                referrerPolicy="no-referrer"
               />
             </div>
             <div className="space-y-6">
@@ -38,20 +49,22 @@ export const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
                 viewport={{ once: true, margin: "-100px" }}
-                src="https://i.imgur.com/C6Fsc9o.png" 
-                alt="Community" 
-                className="rounded-3xl premium-shadow aspect-[4/3] object-cover w-full hover:scale-[1.03] transition-transform duration-500" 
-                referrerPolicy="no-referrer" 
+                src="https://i.imgur.com/C6Fsc9o.png"
+                alt="Community"
+                onClick={() => lightbox.open(2)}
+                className="rounded-3xl premium-shadow aspect-[4/3] object-cover w-full hover:scale-[1.03] transition-transform duration-500 cursor-pointer"
+                referrerPolicy="no-referrer"
               />
               <motion.img 
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
                 viewport={{ once: true, margin: "-100px" }}
-                src="https://i.imgur.com/zzNU4p5.png" 
-                alt="Advocacy" 
-                className="rounded-3xl premium-shadow aspect-[4/5] object-cover w-full hover:scale-[1.03] transition-transform duration-500" 
-                referrerPolicy="no-referrer" 
+                src="https://i.imgur.com/zzNU4p5.png"
+                alt="Advocacy"
+                onClick={() => lightbox.open(3)}
+                className="rounded-3xl premium-shadow aspect-[4/5] object-cover w-full hover:scale-[1.03] transition-transform duration-500 cursor-pointer"
+                referrerPolicy="no-referrer"
               />
             </div>
           </div>
@@ -95,6 +108,13 @@ export const About = () => {
           </motion.div>
         </div>
       </div>
+
+      <Lightbox
+        images={aboutImages}
+        index={lightbox.index}
+        onClose={lightbox.close}
+        onNavigate={lightbox.navigate}
+      />
     </section>
   );
 };

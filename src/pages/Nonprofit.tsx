@@ -1,8 +1,17 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { Heart, Users, Mic2, Facebook } from 'lucide-react';
+import { Lightbox, useLightbox } from '../components/Lightbox';
+
+const communityImages = [
+  { src: 'https://i.imgur.com/EWRs3wV.png', caption: 'Six Feet Above' },
+  { src: 'https://i.imgur.com/m97ekYJ.png', caption: 'Community moment' },
+  { src: 'https://i.imgur.com/PvXMr2w.png', caption: 'Community moment' },
+  { src: 'https://i.imgur.com/D9MWyI1.png', caption: 'Community moment' },
+];
 
 export const Nonprofit = () => {
+  const lightbox = useLightbox();
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -121,24 +130,20 @@ export const Nonprofit = () => {
               </p>
             </motion.div>
             <div className="grid grid-cols-2 gap-6">
-              {[
-                "https://i.imgur.com/EWRs3wV.png",
-                "https://i.imgur.com/m97ekYJ.png",
-                "https://i.imgur.com/PvXMr2w.png",
-                "https://i.imgur.com/D9MWyI1.png"
-              ].map((src, idx) => (
-                <motion.div 
+              {communityImages.map((img, idx) => (
+                <motion.div
                   key={idx}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: idx * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.05, rotate: idx % 2 === 0 ? 2 : -2 }}
-                  className="aspect-square rounded-3xl overflow-hidden shadow-md group"
+                  onClick={() => lightbox.open(idx)}
+                  className="aspect-square rounded-3xl overflow-hidden shadow-md group cursor-pointer"
                 >
-                  <img 
-                    src={src} 
-                    alt={`Community moment ${idx + 1}`} 
+                  <img
+                    src={img.src}
+                    alt={`Community moment ${idx + 1}`}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                   />
@@ -161,6 +166,13 @@ export const Nonprofit = () => {
           </div>
         </div>
       </div>
+
+      <Lightbox
+        images={communityImages}
+        index={lightbox.index}
+        onClose={lightbox.close}
+        onNavigate={lightbox.navigate}
+      />
     </section>
   );
 };
