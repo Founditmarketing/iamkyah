@@ -1,6 +1,7 @@
 import React from 'react';
 import { Mail, CheckCircle2 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { Testimonials } from '../components/Testimonials';
 
 export const Speaking = () => {
   const topics = [
@@ -14,6 +15,7 @@ export const Speaking = () => {
   ];
 
   return (
+    <>
     <section className="py-32 bg-[#2d2d2d] text-white rounded-[4rem] mx-4 md:mx-10 my-20 min-h-[90vh] flex items-center shadow-2xl relative overflow-hidden">
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#5a6e5a]/10 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#5a6e5a]/10 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/3 pointer-events-none" />
@@ -80,5 +82,8 @@ export const Speaking = () => {
         </div>
       </div>
     </section>
+
+    <Testimonials />
+    </>
   );
 };
